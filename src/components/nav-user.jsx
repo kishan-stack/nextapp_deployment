@@ -1,4 +1,5 @@
 "use client"
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs"
 
 import {
   BadgeCheck,
@@ -97,10 +98,14 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              <Link href='/login'>LogOut</Link>
+            <LogoutLink>
+              <DropdownMenuItem className="">
+                <div className="flex gap-4 p-2">
+                  <LogOut size={20} className="" />
+                  LogOut
+                </div>
             </DropdownMenuItem>
+            </LogoutLink>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

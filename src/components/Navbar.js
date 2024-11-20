@@ -4,14 +4,13 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LuLogIn } from "react-icons/lu";
+import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
 
-  const handleLoginClick = () => {
-    router.push("/login");
-  };
+  
   const aboutClick = () => {
     router.push("/about");
   };
@@ -67,14 +66,15 @@ export default function Navbar() {
             <Link href="/features" className="font-bold">
               Features
             </Link>
-
+            <LoginLink postLoginRedirectURL="/dashboard">
             <Button
               variant="default"
               className="border-white text-white hover:bg-gray-800"
-              onClick={handleLoginClick}
+              
             >
               Login
             </Button>
+            </LoginLink>
           </div>
         </div>
       </nav>
@@ -104,16 +104,18 @@ export default function Navbar() {
               </Link>
 
               {/* Mobile Login Button */}
+              <LoginLink postLoginRedirectURL="/dashboard" >
               <Button
                 variant="default"
                 className="border-gray-900 text-white bg-gray-800 hover:bg-gray-700 mt-6 flex items-center justify-center"
                 onClick={() => {
-                  handleLoginClick();
+                  
                   toggleMobileMenu();
                 }}
               >
                 Login <LuLogIn className="ml-2" />
               </Button>
+              </LoginLink>
             </div>
           </div>
         </div>

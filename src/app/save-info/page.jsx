@@ -1,58 +1,89 @@
 // app/college-info/page.tsx
-
 "use client";
 import { useState } from "react";
-import { data } from "../data.js";
 import { useRouter } from "next/navigation";
-import Link from "next/link.js";
+import Link from "next/link";
+import axios from "axios";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
+import { toast } from "react-toastify";
+import { data } from "../data.js";
+
+const initialFormState = {
+  collegeName: "",
+  location: "",
+  departmentName: "",
+  academicYear: "",
+  skills: [],
+  interests: [],
+};
 
 export default function CollegeInfoForm() {
+  const { user, isLoading } = useKindeAuth();
+  
   const router = useRouter();
   const { colleges, locations, departments, academicYears, skills, interests } = data;
 
-  const [collegeName, setCollegeName] = useState("");
-  const [location, setLocation] = useState("");
-  const [departmentName, setDepartmentName] = useState("");
-  const [academicYear, setAcademicYear] = useState("");
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [formData, setFormData] = useState(initialFormState);
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // Filtered skills and interests based on department selection
-  const departmentSkills = departmentName ? skills[departmentName] || [] : [];
-  const departmentInterests = departmentName ? interests[departmentName] || [] : [];
-
-  // Update skill selection
-  const handleSkillChange = (skill) => {
-    setSelectedSkills((prev) =>
-      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
-    );
+  if (!user) {
+    return <div>You must be logged in to access this form.</div>;
+  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // Update interest selection
-  const handleInterestChange = (interest) => {
-    setSelectedInterests((prev) =>
-      prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest]
-    );
+  const handleCheckboxChange = (name, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: prev[name].includes(value)
+        ? prev[name].filter((item) => item !== value)
+        : [...prev[name], value],
+    }));
   };
-
-  // Form submit handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = {
-      collegeName,
-      location,
-      departmentName,
-      academicYear,
-      skills: selectedSkills,
-      interests: selectedInterests,
+
+    const payload = {
+      ...formData,
+      
+      email: user.email,
+      firstName: user.given_name,
+      lastName: user.family_name,
     };
-    console.log("Submitted Data:", formData);
-    router.push("/dashboard");
+    
+
+    try {
+      await axios.post("http://localhost:5000/register", payload);
+      toast.success("Profile created successfully!");
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("There was an error. Please try again.");
+    }
   };
+
+  // Filtered skills and interests based on department
+  const departmentSkills = formData.departmentName
+    ? skills[formData.departmentName] || []
+    : [];
+  const departmentInterests = formData.departmentName
+    ? interests[formData.departmentName] || []
+    : [];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto rounded-xl shadow-xl hover:shadow-2xl mt-20 p-4">
-      <Link href='/'>Collab.io</Link>
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 max-w-md mx-auto rounded-xl shadow-xl hover:shadow-2xl mt-20 p-4"
+    >
+      <Link href="/">Collab.io</Link>
       <h2 className="text-xl font-semibold mb-4">College Information Form</h2>
 
       {/* Location Dropdown */}
@@ -60,10 +91,10 @@ export default function CollegeInfoForm() {
         <label className="block font-medium">Location</label>
         <select
           name="location"
-          value={location}
+          value={formData.location}
           onChange={(e) => {
-            setLocation(e.target.value);
-            setCollegeName(""); // Reset college name when location changes
+            handleChange(e);
+            setFormData((prev) => ({ ...prev, collegeName: "" }));
           }}
           className="w-full border p-2 rounded"
           required
@@ -77,19 +108,19 @@ export default function CollegeInfoForm() {
         </select>
       </div>
 
-      {/* College Name Dropdown */}
+      {/* College Dropdown */}
       <div>
         <label className="block font-medium">College Name</label>
         <select
           name="collegeName"
-          value={collegeName}
-          onChange={(e) => setCollegeName(e.target.value)}
+          value={formData.collegeName}
+          onChange={handleChange}
           className="w-full border p-2 rounded"
           required
         >
           <option value="">Select College</option>
-          {location &&
-            colleges[location].map((college) => (
+          {formData.location &&
+            colleges[formData.location].map((college) => (
               <option key={college} value={college}>
                 {college}
               </option>
@@ -102,11 +133,10 @@ export default function CollegeInfoForm() {
         <label className="block font-medium">Department Name</label>
         <select
           name="departmentName"
-          value={departmentName}
+          value={formData.departmentName}
           onChange={(e) => {
-            setDepartmentName(e.target.value);
-            setSelectedSkills([]); // Reset skills on department change
-            setSelectedInterests([]); // Reset interests on department change
+            handleChange(e);
+            setFormData((prev) => ({ ...prev, skills: [], interests: [] }));
           }}
           className="w-full border p-2 rounded"
           required
@@ -125,8 +155,8 @@ export default function CollegeInfoForm() {
         <label className="block font-medium">Academic Year</label>
         <select
           name="academicYear"
-          value={academicYear}
-          onChange={(e) => setAcademicYear(e.target.value)}
+          value={formData.academicYear}
+          onChange={handleChange}
           className="w-full border p-2 rounded"
           required
         >
@@ -148,8 +178,8 @@ export default function CollegeInfoForm() {
               <label key={skill} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  checked={selectedSkills.includes(skill)}
-                  onChange={() => handleSkillChange(skill)}
+                  checked={formData.skills.includes(skill)}
+                  onChange={() => handleCheckboxChange("skills", skill)}
                 />
                 <span>{skill}</span>
               </label>
@@ -167,8 +197,8 @@ export default function CollegeInfoForm() {
               <label key={interest} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  checked={selectedInterests.includes(interest)}
-                  onChange={() => handleInterestChange(interest)}
+                  checked={formData.interests.includes(interest)}
+                  onChange={() => handleCheckboxChange("interests", interest)}
                 />
                 <span>{interest}</span>
               </label>

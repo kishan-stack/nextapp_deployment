@@ -3,13 +3,12 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function HeroSection() {
   const router = useRouter();
 
-  const handleLoginClick = () => {
-    router.push("/register"); // Navigates to the /login page
-  };
+  
   return (
     <section className="relative  text-black py-16 md:py-24 lg:py-32 w-full " >
       <div className="container mx-auto px-6 md:flex md:items-center">
@@ -21,9 +20,11 @@ export default function HeroSection() {
           <p className="text-lg md:text-xl text-gray-700 mb-6">
             Discover students based on skills and interests, collaborate on projects, and expand your network.
           </p>
-          <Button size="lg" onClick={handleLoginClick}>
-            Get Started
-          </Button>
+          <RegisterLink postLoginRedirectURL="/save-info">
+            <Button size="lg" >
+              Get Started
+            </Button>
+          </RegisterLink>
         </div>
 
         {/* Right Side - Illustration */}

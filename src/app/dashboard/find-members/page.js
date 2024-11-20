@@ -1,18 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { ChevronDown, ChevronUp, UserPlus2 } from "lucide-react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
-
+import axios from "axios";
 export default function FindMembers() {
     const [showProfile, setShowProfile] = useState(true);
-
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
     const toggleProfile = () => {
         setShowProfile((prev) => !prev);
     };
 
+    useEffect(() => {
+        axios
+            .get("http://localhost:5000/get-allusers") // Your API endpoint
+            .then((response) => {
+                setUsers(response.data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching users:", error);
+                setLoading(false);
+            });
+
+            
+    }, []);
     return (
         <main className="h-full rounded-lg mt-1 shadow-xl overflow-hidden dark:border-white pb-8 pt-4">
             <header className="px-4">
@@ -33,23 +48,30 @@ export default function FindMembers() {
                             Potential members you may like
                         </p>
 
-                        {[...Array(7)].map((_, index) => (
-                            <div key={index} className="flex-grow shadow-xl border-s-8 mt-2 w-full p-4 bg-white rounded-lg dark:bg-gray-800">
-                                <div className="flex items-center gap-4">
-                                    <Image
-                                        src="/superman.jpg"
-                                        width={500}
-                                        height={500}
-                                        className="rounded-full w-[50px] h-[50px]"
-                                        alt="pfp"
-                                    />
-                                    <Link href={`/dashboard/users/${index}`}>
-                                        <p>Username</p>
-                                    </Link>
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            users.map((user, index) => (
+                                <div key={index} className="flex-grow shadow-xl border-s-8 mt-2 w-full p-4 bg-white rounded-lg dark:bg-gray-800">
+                                    <div className="flex items-center gap-4">
+                                        <Image
+                                            src="/superman.jpg" // You can use a dynamic image here if available
+                                            width={500}
+                                            height={500}
+                                            className="rounded-full w-[50px] h-[50px]"
+                                            alt="pfp"
+                                        />
+                                        <Link href={`/dashboard/users/${index}`}>
+                                            <p>{user.firstName} {user.lastName}</p>
+                                            <p>{user.email}</p>
+                                        </Link>
+                                    </div>
+                                    <div className="px-4 mt-2">
+                                        <p>Skills: {user.skills.join(", ")}</p>
+                                    </div>
                                 </div>
-                                <div className="px-4 mt-2">Skills: Python, Data Science, Web Dev</div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </section>
 
