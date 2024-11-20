@@ -16,7 +16,7 @@ export default function FindMembers() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:5000/get-allusers") // Your API endpoint
+            .get("https://nodeapi-deployment.vercel.app/get-allusers") // Your API endpoint
             .then((response) => {
                 setUsers(response.data);
                 setLoading(false);

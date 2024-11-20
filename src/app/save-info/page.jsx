@@ -61,7 +61,7 @@ export default function CollegeInfoForm() {
     
 
     try {
-      await axios.post("http://localhost:5000/register", payload);
+      await axios.post("https://nodeapi-deployment.vercel.app/register", payload);
       toast.success("Profile created successfully!");
       router.push("/dashboard");
     } catch (error) {
