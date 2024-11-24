@@ -66,7 +66,7 @@ export default function Navbar() {
             <Link href="/features" className="font-bold">
               Features
             </Link>
-            <LoginLink postLoginRedirectURL="/dashboard">
+            <LoginLink postLoginRedirectURL="/callback">
             <Button
               variant="default"
               className="border-white text-white hover:bg-gray-800"
@@ -104,7 +104,7 @@ export default function Navbar() {
               </Link>
 
               {/* Mobile Login Button */}
-              <LoginLink postLoginRedirectURL="/dashboard" >
+              <LoginLink postLoginRedirectURL="/callback" >
               <Button
                 variant="default"
                 className="border-gray-900 text-white bg-gray-800 hover:bg-gray-700 mt-6 flex items-center justify-center"

@@ -20,7 +20,7 @@ export default function HeroSection() {
           <p className="text-lg md:text-xl text-gray-700 mb-6">
             Discover students based on skills and interests, collaborate on projects, and expand your network.
           </p>
-          <RegisterLink postLoginRedirectURL="/save-info">
+          <RegisterLink postLoginRedirectURL="/callback">
             <Button size="lg" >
               Get Started
             </Button>
