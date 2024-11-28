@@ -2,6 +2,7 @@
 import {  Search, Swords, GraduationCap, UsersRoundIcon, CommandIcon, User, AirplayIcon, HomeIcon } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { useSidebar } from "@/components/ui/sidebar";
+
 import {
     Sidebar,
     SidebarHeader,
@@ -15,13 +16,9 @@ import {
    
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
-const user = {
-    user: {
-        name: "SuperMan",
-        email: "clarkKent@batman.com",
-        avatar: "/superman.jpg",
-      },
-}
+import { useEffect, useState } from "react";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
+
 const projects = [
     { name: "Home", url: "/", icon: HomeIcon },
     { name: "Dashboard", url: "/dashboard", icon: AirplayIcon },
@@ -47,8 +44,24 @@ const projects = [
     { name: "Internships", url: "/dashboard/internships", icon: GraduationCap },
 ];
 
+
 export function AppSidebar({ ...props }) {
-    
+    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const {idToken}=useKindeAuth()
+    useEffect(() => {
+        if (idToken?.email) {
+          setEmail(idToken.email); 
+          setUsername(idToken.name)// Set email from idToken
+        }
+      }, [idToken]);
+    const user = {
+        user: {
+            name:username,
+            email: email,
+            avatar: "/superman.jpg",
+          },
+    }
     // Close dropdown on route change
     const {}=useSidebar()
     return (

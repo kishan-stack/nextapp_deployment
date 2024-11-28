@@ -1,6 +1,6 @@
 "use client"
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs"
-
+import { LogoutLink, useKindeAuth } from "@kinde-oss/kinde-auth-nextjs"
+import { useState,useEffect } from "react"
 import {
   BadgeCheck,
   Bell,
@@ -35,8 +35,9 @@ import Link from "next/link"
 export function NavUser({
   user,
 }) {
+  
   const { isMobile } = useSidebar()
-
+  
   return (
     <SidebarMenu>
       <SidebarMenuItem>

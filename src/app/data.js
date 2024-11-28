@@ -4,7 +4,7 @@ export const data = {
     academicYears: ["First Year", "Second Year", "Third Year", "Fourth Year"],
   
     skills: {
-      "Computer Science": ["Programming", "Data Structures", "Algorithms", "AI", "Web Development"],
+      "Computer Science": ["Programming", "Data Structures", "Algorithms", "AI", "Web Development"," JavaScript"],
       "Mechanical Engineering": ["Thermodynamics", "Fluid Mechanics", "CAD", "Robotics", "Manufacturing"],
       "Electrical Engineering": ["Circuit Analysis", "Power Systems", "Electronics", "Signal Processing"],
       "Civil Engineering": ["Structural Analysis", "Geotechnical Engineering", "Surveying", "Environmental Science"]
