@@ -1,5 +1,5 @@
 "use client";
-import useTokenCheck from "@/hooks/useDemo";
+import useTokenCheck from "@/hooks/useTokenCheck";
 const CallbackPage = () => {
   useTokenCheck(); // Automatically checks user and redirects
 

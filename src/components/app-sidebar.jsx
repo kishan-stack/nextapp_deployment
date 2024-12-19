@@ -1,5 +1,5 @@
 "use client";
-import {  Search, Swords, GraduationCap, UsersRoundIcon, CommandIcon, User, AirplayIcon, HomeIcon } from "lucide-react";
+import {  Search, Swords,Handshake, GraduationCap, UsersRoundIcon, CommandIcon, User, AirplayIcon, HomeIcon } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { useSidebar } from "@/components/ui/sidebar";
 
@@ -19,10 +19,11 @@ import { NavUser } from "./nav-user";
 import { useEffect, useState } from "react";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 
-const projects = [
+const dashboardUrls = [
     { name: "Home", url: "/", icon: HomeIcon },
     { name: "Dashboard", url: "/dashboard", icon: AirplayIcon },
     { name: "Find Members", url: "/dashboard/find-members", icon: Search },
+    { name: "Build Team", url: "/dashboard/buildTeam", icon: Handshake },
     {
         name: "Teams",
         url: "/dashboard/teams",
@@ -86,7 +87,7 @@ export function AppSidebar({ ...props }) {
             <SidebarSeparator/>
             <SidebarContent>
                 <NavMain
-                    items={projects}
+                    items={dashboardUrls}
                      // Pass function to handle team selection
                 />
             </SidebarContent>

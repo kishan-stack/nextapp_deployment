@@ -50,7 +50,7 @@ export default function CollegeInfoForm() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    toast.info("Please wait while your profile is being created!")
     const payload = {
       ...formData,
       
