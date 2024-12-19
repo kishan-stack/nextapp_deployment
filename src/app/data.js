@@ -1,7 +1,7 @@
 // data.js
 export const data = {
   departments: ["Computer Science", "Mechanical Engineering", "Electrical Engineering", "Civil Engineering", "Information Technology","AI/ML","AI/DS"],
-  academicYears: ["First Year", "Second Year", "Third Year", "Fourth Year"],
+  academicYears: ["First Year", "Second Year", "Third Year", "Fourth Year","Alumni"],
 
   skills: {
     "Computer Science": ["Data Structures & Algorithms", "Python",
